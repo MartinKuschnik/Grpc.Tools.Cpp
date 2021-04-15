@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup>
+        <!-- 
+		Custom project property page. (currently not needed.)
+		
+		<PropertyPageSchema Include="$(MSBuildThisFileDirectory)Grpc.Tools.CPP.xml">
+            <Context>Project</Context>
+        </PropertyPageSchema> 
+		-->
+        <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Grpc.Tools.CPP.proto.xml" />
+        <AvailableItemName Include="ProtobufCompile">
+            <Targets>ProtobufCompile</Targets>
+        </AvailableItemName>
+    </ItemGroup>
+    <PropertyGroup>
+        <CleanDependsOn>
+			ProtobufClean;
+			$(CleanDependsOn)
+		</CleanDependsOn>
+    </PropertyGroup>
+    <ItemDefinitionGroup>
+        <ClCompile>
+            <AdditionalIncludeDirectories>%(ClCompile.AdditionalIncludeDirectories);$(ProtobufOutDir)</AdditionalIncludeDirectories>
+        </ClCompile>
+		<Link>
+            <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+        </Link>
+    </ItemDefinitionGroup>
+    <Target Name="ProtobufCompile" Label="blub"  BeforeTargets="PrepareForBuild" Inputs="@(ProtobufCompile)" Outputs="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.cc')">
+        <PropertyGroup>
+		     <VcpkgInstallDir>$(VcpkgRoot)installed\x64-windows\</VcpkgInstallDir>
+			<GrpcDir>$(VcpkgInstallDir)tools\grpc\</GrpcDir>
+			<ProtobufDir>$(VcpkgInstallDir)tools\protobuf\</ProtobufDir>	
+            <ProtoPath>%(ProtobufCompile.RootDir)\%(ProtobufCompile.Directory)</ProtoPath>
+        </PropertyGroup>
+		
+        <Error Condition="$(VcpkgEnabled)!='true'" Text="Vcpkg not enabled. See https://github.com/microsoft/vcpkg#getting-started for more details." />
+        <Error Condition="!Exists('$(GrpcDir)')" Text="gRPC not installed. Use 'vcpkg install grpc:x64-windows' to install gRPC." />
+		
+        <MakeDir Directories="$(ProtobufOutDir)" Condition="!Exists('$(ProtobufOutDir)')" />		
+        <Exec Command="&quot;$(ProtobufDir)protoc.exe&quot; --plugin=protoc-gen-grpc=&quot;$(GrpcDir)grpc_cpp_plugin.exe&quot; --grpc_out=&quot;$(ProtobufOutDir.Trim('\\'))&quot; --cpp_out=&quot;$(ProtobufOutDir.Trim('\\'))&quot; --proto_path=&quot;$(ProtoPath.Trim('\\'))&quot; %(ProtobufCompile.FullPath)" />
+        
+		<ItemGroup>
+            <ClInclude Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h" />
+            <ClCompile Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc')" />
+            <ClInclude Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h')" />
+            <ClCompile Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.cc')" />
+        </ItemGroup>
+		
+    </Target>
+    <Target Name="ProtobufClean">
+        <Delete Files="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h')" />
+        <Delete Files="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc')" />
+        <Delete Files="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h')" />
+        <Delete Files="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.cc')" />
+    </Target>
+</Project>
