@@ -4,11 +4,11 @@
         <!-- 
 		Custom project property page. (currently not needed.)
 		
-		<PropertyPageSchema Include="$(MSBuildThisFileDirectory)Grpc.Tools.CPP.xml">
+		<PropertyPageSchema Include="$(MSBuildThisFileDirectory)Vcpkg.Grpc.Tools.CPP.xml">
             <Context>Project</Context>
         </PropertyPageSchema> 
 		-->
-        <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Grpc.Tools.CPP.proto.xml" />
+        <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Vcpkg.Grpc.Tools.CPP.proto.xml" />
         <AvailableItemName Include="ProtobufCompile">
             <Targets>ProtobufCompile</Targets>
         </AvailableItemName>
