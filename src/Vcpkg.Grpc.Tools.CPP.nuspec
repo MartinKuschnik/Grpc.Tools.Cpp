@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Vcpkg.Grpc.Tools.CPP</id>
-    <version>1.0.0-pre</version>
+    <version>1.0.1</version>
     <title>Grpc.Tools.CPP</title>
     <authors>Martin Kuschnik</authors>
     <owners>Martin Kuschnik</owners>
@@ -14,7 +14,6 @@
     <tags>gRPC RPC HTTP/2 c++ cpp vcpkg</tags>
   </metadata>
   <files>
-    <file src="build\native\Vcpkg.Grpc.Tools.CPP.props" target="build\native\Vcpkg.Grpc.Tools.CPP.props" />
     <file src="build\native\Vcpkg.Grpc.Tools.CPP.proto.xml" target="build\native\Vcpkg.Grpc.Tools.CPP.proto.xml" />
     <file src="build\native\Vcpkg.Grpc.Tools.CPP.targets" target="build\native\Vcpkg.Grpc.Tools.CPP.targets" />
     <file src="build\native\Vcpkg.Grpc.Tools.CPP.xml" target="build\native\Vcpkg.Grpc.Tools.CPP.xml" />

@@ -21,7 +21,7 @@
     </PropertyGroup>
     <ItemDefinitionGroup>
         <ClCompile>
-            <AdditionalIncludeDirectories>%(ClCompile.AdditionalIncludeDirectories);$(ProtobufOutDir)</AdditionalIncludeDirectories>
+            <AdditionalIncludeDirectories>%(ClCompile.AdditionalIncludeDirectories);$(IntDir)protoc\</AdditionalIncludeDirectories>
         </ClCompile>
 		<Link>
             <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -29,10 +29,11 @@
     </ItemDefinitionGroup>
     <Target Name="ProtobufCompile" Label="blub"  BeforeTargets="PrepareForBuild" Inputs="@(ProtobufCompile)" Outputs="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.cc')">
         <PropertyGroup>
-		     <VcpkgInstallDir>$(VcpkgRoot)installed\x64-windows\</VcpkgInstallDir>
+		    <VcpkgInstallDir>$(VcpkgRoot)installed\x64-windows\</VcpkgInstallDir>
 			<GrpcDir>$(VcpkgInstallDir)tools\grpc\</GrpcDir>
 			<ProtobufDir>$(VcpkgInstallDir)tools\protobuf\</ProtobufDir>	
             <ProtoPath>%(ProtobufCompile.RootDir)\%(ProtobufCompile.Directory)</ProtoPath>
+			<ProtobufOutDir>$(IntDir)protoc\</ProtobufOutDir>
         </PropertyGroup>
 		
         <Error Condition="$(VcpkgEnabled)!='true'" Text="Vcpkg not enabled. See https://github.com/microsoft/vcpkg#getting-started for more details." />
@@ -50,6 +51,10 @@
 		
     </Target>
     <Target Name="ProtobufClean">
+	    <PropertyGroup>
+			<ProtobufOutDir>$(IntDir)protoc\</ProtobufOutDir>
+		</PropertyGroup>
+			
         <Delete Files="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h')" />
         <Delete Files="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc')" />
         <Delete Files="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h')" />
