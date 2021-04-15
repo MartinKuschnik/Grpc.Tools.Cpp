@@ -21,4 +21,4 @@ jobs:
         nuget-api-key: ${{ secrets.NUGET_API_KEY }}
         nuget-version: '5.8'
     - run: nuget pack src\Grpc.Tools.CPP.nuspec
-    - run: nuget push Grpc.Tools.CPP.*.nupkg -source https://api.nuget.org/v3/index.json
+    - run: nuget push Grpc.Tools.CPP.*.nupkg -source https://api.nuget.org/v3/index.json -Verbosity
