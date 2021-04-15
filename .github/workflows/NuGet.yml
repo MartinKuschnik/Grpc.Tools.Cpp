@@ -22,4 +22,4 @@ jobs:
         nuget-version: '5.x'
     - run: nuget pack src\Grpc.Tools.CPP.nuspec -OutputDirectory pack
     - run: tree /f
-    - run: nuget push pack\Grpc.Tools.CPP.*.nuspec -source https://www.nuget.org/
+    - run: nuget push .\pack\*.nuspec -source https://www.nuget.org/
