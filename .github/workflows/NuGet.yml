@@ -20,6 +20,6 @@ jobs:
       with:
         nuget-api-key: ${{ secrets.NUGET_API_KEY }}
         nuget-version: '5.x'
-    - run: nuget pack src\Grpc.Tools.CPP.nuspec -OutputDirectory pack
+    - run: nuget pack src\Grpc.Tools.CPP.nuspec
     - run: tree /f
-    - run: nuget push .\pack\*.nuspec -source https://www.nuget.org/
+    - run: nuget push Grpc.Tools.CPP.*.nupkg -source https://www.nuget.org/
