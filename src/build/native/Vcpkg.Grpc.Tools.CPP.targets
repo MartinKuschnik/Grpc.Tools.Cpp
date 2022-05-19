@@ -29,7 +29,7 @@
     </ItemDefinitionGroup>
     <Target Name="ProtobufCompile" Label="blub"  BeforeTargets="PrepareForBuild" Inputs="@(ProtobufCompile)" Outputs="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.cc')">
         <PropertyGroup>
-		    <VcpkgInstallDir>$(VcpkgRoot)installed\x64-windows\</VcpkgInstallDir>
+		    <VcpkgInstallDir>$(VcpkgRoot)\installed\x64-windows\</VcpkgInstallDir>
 			<GrpcDir>$(VcpkgInstallDir)tools\grpc\</GrpcDir>
 			<ProtobufDir>$(VcpkgInstallDir)tools\protobuf\</ProtobufDir>	
             <ProtoPath>%(ProtobufCompile.RootDir)\%(ProtobufCompile.Directory)</ProtoPath>
