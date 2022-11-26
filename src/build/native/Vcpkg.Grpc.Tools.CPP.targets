@@ -17,7 +17,7 @@
         <CleanDependsOn>
 			ProtobufClean;
 			$(CleanDependsOn)
-		</CleanDependsOn>
+	</CleanDependsOn>
     </PropertyGroup>
     <ItemDefinitionGroup>
         <ClCompile>
@@ -27,22 +27,41 @@
             <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
         </Link>
     </ItemDefinitionGroup>
-    <Target Name="ProtobufCompile" Label="blub"  BeforeTargets="PrepareForBuild" Inputs="@(ProtobufCompile)" Outputs="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.cc')">
-        <PropertyGroup>
-		    <VcpkgInstallDir>$(VcpkgRoot)\installed\x64-windows\</VcpkgInstallDir>
-			<GrpcDir>$(VcpkgInstallDir)tools\grpc\</GrpcDir>
-			<ProtobufDir>$(VcpkgInstallDir)tools\protobuf\</ProtobufDir>	
-            <ProtoPath>%(ProtobufCompile.RootDir)\%(ProtobufCompile.Directory)</ProtoPath>
-			<ProtobufOutDir>$(IntDir)protoc\</ProtobufOutDir>
-        </PropertyGroup>
-		
+	
+	<PropertyGroup Condition="$(VcpkgInstalledDir)==''">
+		<VcpkgInstallDir>$(VcpkgRoot)\installed\x64-windows\</VcpkgInstallDir>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="$(VcpkgInstalledDir)!=''">
+		<VcpkgInstallDir>$(VcpkgInstalledDir)\x64-windows\</VcpkgInstallDir>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="$(VcpkgEnableManifest)!='true'">
+		<ProtobufAfterTargets>PrepareForBuild</ProtobufAfterTargets>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="$(VcpkgEnableManifest)=='true'">
+		<ProtobufAfterTargets>VcpkgInstallManifestDependencies</ProtobufAfterTargets>
+	</PropertyGroup>
+	
+    <Target Name="ProtobufCompile" AfterTargets="$(ProtobufAfterTargets)" Inputs="@(ProtobufCompile)" Outputs="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h');@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.cc')">
+			
+	<PropertyGroup>
+		<GrpcDir>$(VcpkgInstallDir)tools\grpc\</GrpcDir>
+		<ProtobufDir>$(VcpkgInstallDir)tools\protobuf\</ProtobufDir>	
+            	<ProtoPath>%(ProtobufCompile.RootDir)\%(ProtobufCompile.Directory)</ProtoPath>
+		<ProtobufOutDir>$(IntDir)protoc\</ProtobufOutDir>
+	</PropertyGroup>
+				
         <Error Condition="$(VcpkgEnabled)!='true'" Text="Vcpkg not enabled. See https://github.com/microsoft/vcpkg#getting-started for more details." />
-        <Error Condition="!Exists('$(GrpcDir)')" Text="gRPC not installed. Use 'vcpkg install grpc:x64-windows' to install gRPC." />
+				
+        <Error Condition="!Exists('$(GrpcDir)') AND $(VcpkgEnableManifest)!='true'" Text="gRPC not installed. Use 'vcpkg install grpc:$(PlatformTarget)-windows' to install gRPC." />		
+        <Error Condition="!Exists('$(GrpcDir)') AND $(VcpkgEnableManifest)=='true'" Text="gRPC not found. Add grpc as dependency to the 'vcpkg.json' file." />
 		
         <MakeDir Directories="$(ProtobufOutDir)" Condition="!Exists('$(ProtobufOutDir)')" />		
         <Exec Command="&quot;$(ProtobufDir)protoc.exe&quot; --plugin=protoc-gen-grpc=&quot;$(GrpcDir)grpc_cpp_plugin.exe&quot; --grpc_out=&quot;$(ProtobufOutDir.Trim('\\'))&quot; --cpp_out=&quot;$(ProtobufOutDir.Trim('\\'))&quot; --proto_path=&quot;$(ProtoPath.Trim('\\'))&quot; %(ProtobufCompile.FullPath)" />
         
-		<ItemGroup>
+	<ItemGroup>
             <ClInclude Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h" />
             <ClCompile Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc')" />
             <ClInclude Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h')" />
@@ -50,6 +69,7 @@
         </ItemGroup>
 		
     </Target>
+	
     <Target Name="ProtobufClean">
 	    <PropertyGroup>
 			<ProtobufOutDir>$(IntDir)protoc\</ProtobufOutDir>
