@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Vcpkg.Grpc.Tools.CPP</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <title>Grpc.Tools.CPP</title>
     <authors>Martin Kuschnik</authors>
     <owners>Martin Kuschnik</owners>
@@ -10,7 +10,7 @@
     <description>gRPC and Protocol Buffer compiler integration for native C++ projects.</description>
     <projectUrl>https://github.com/MartinKuschnik/Grpc.Tools.Cpp</projectUrl>
     <repository type="git" url="https://github.com/MartinKuschnik/Grpc.Tools.Cpp.git" />
-	<copyright>Copyright 2021 Martin Kuschnik</copyright>
+    <copyright>Copyright 2021 Martin Kuschnik</copyright>
     <tags>gRPC RPC HTTP/2 c++ cpp vcpkg</tags>
   </metadata>
   <files>
