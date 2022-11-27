@@ -62,10 +62,10 @@
         <Exec Command="&quot;$(ProtobufDir)protoc.exe&quot; --plugin=protoc-gen-grpc=&quot;$(GrpcDir)grpc_cpp_plugin.exe&quot; --grpc_out=&quot;$(ProtobufOutDir.Trim('\\'))&quot; --cpp_out=&quot;$(ProtobufOutDir.Trim('\\'))&quot; --proto_path=&quot;$(ProtoPath.Trim('\\'))&quot; %(ProtobufCompile.FullPath)" />
         
 	<ItemGroup>
-            <ClInclude Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h" />
-            <ClCompile Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc')" />
-            <ClInclude Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h')" />
-            <ClCompile Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.cc')" />
+            <ClInclude WarningLevel="TurnOffAllWarnings" Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.h" />
+            <ClCompile WarningLevel="TurnOffAllWarnings" Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).pb.cc')" />
+            <ClInclude WarningLevel="TurnOffAllWarnings" Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.h')" />
+            <ClCompile WarningLevel="TurnOffAllWarnings" Include="@(ProtobufCompile->'$(ProtobufOutDir)%(Filename).grpc.pb.cc')" />
         </ItemGroup>
 		
     </Target>
